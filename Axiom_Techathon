@@ -1,0 +1,179 @@
+#define L_R_EN 7
+#define L_L_EN 8
+#define L_RPWM 5
+#define L_LPWM 6
+
+#define R_R_EN 11
+#define R_L_EN 12
+#define R_RPWM 9
+#define R_LPWM 10
+
+#define FORWARD 'F'
+#define BACKWARD 'B'
+#define LEFT 'L'
+#define RIGHT 'R'
+#define STOP 'S'
+#define FOR_RIG 'I'
+#define FOR_LEF 'G'
+#define BAC_LEF 'H'
+#define BAC_RIG 'J'
+#define HOR_ON 'V'
+#define HOR_OFF 'v'
+
+void setup() {
+ 
+  pinMode(L_R_EN, OUTPUT);
+  pinMode(L_L_EN, OUTPUT);
+  pinMode(L_RPWM, OUTPUT);
+  pinMode(L_LPWM, OUTPUT);
+
+  pinMode(R_R_EN, OUTPUT);
+  pinMode(R_L_EN, OUTPUT);
+  pinMode(R_RPWM, OUTPUT);
+  pinMode(R_LPWM, OUTPUT);
+
+  Serial.begin(9600);
+
+  stopMotors();
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    char command = Serial.read(); 
+
+    switch (command) {
+      case FORWARD:
+        moveForward();
+        break;
+      case BACKWARD:
+        moveBackward();
+        break;
+      case LEFT:
+        turnLeft();
+        break;
+      case RIGHT:
+        turnRight();
+        break;
+      case FOR_RIG:
+        forRig();
+        break;
+      case FOR_LEF:
+        forLef();
+        break;
+      case BAC_RIG:
+        bacRig();
+        break;
+      case BAC_LEF:
+        bacLef();
+        break;
+      case STOP:
+        stopMotors();
+        break;
+      default:
+        break;
+    }
+  }
+}
+
+void moveForward() {
+  digitalWrite(L_R_EN, HIGH);
+  digitalWrite(L_L_EN, HIGH);
+  analogWrite(L_RPWM, 255);
+  analogWrite(L_LPWM, 0);
+
+  digitalWrite(R_R_EN, HIGH);
+  digitalWrite(R_L_EN, HIGH);
+  analogWrite(R_RPWM, 255);
+  analogWrite(R_LPWM, 0);
+}
+
+void moveBackward() {
+  digitalWrite(L_R_EN, HIGH);
+  digitalWrite(L_L_EN, HIGH);
+  analogWrite(L_RPWM, 0);
+  analogWrite(L_LPWM, 255);
+
+  digitalWrite(R_R_EN, HIGH);
+  digitalWrite(R_L_EN, HIGH);
+  analogWrite(R_RPWM, 0);
+  analogWrite(R_LPWM, 255);
+}
+
+void turnLeft() {
+  digitalWrite(L_R_EN, HIGH);
+  digitalWrite(L_L_EN, HIGH);
+  analogWrite(L_RPWM, 0);
+  analogWrite(L_LPWM, 255);
+
+  digitalWrite(R_R_EN, HIGH);
+  digitalWrite(R_L_EN, HIGH);
+  analogWrite(R_RPWM, 255);
+  analogWrite(R_LPWM, 0);
+}
+
+void turnRight() {
+  digitalWrite(L_R_EN, HIGH);
+  digitalWrite(L_L_EN, HIGH);
+  analogWrite(L_RPWM, 255);
+  analogWrite(L_LPWM, 0);
+
+  digitalWrite(R_R_EN, HIGH);
+  digitalWrite(R_L_EN, HIGH);
+  analogWrite(R_RPWM, 0);
+  analogWrite(R_LPWM, 255);
+}
+
+void stopMotors() {
+  analogWrite(L_RPWM, 0);
+  analogWrite(L_LPWM, 0);
+  analogWrite(R_RPWM, 0);
+  analogWrite(R_LPWM, 0);
+}
+
+void forRig() {
+  digitalWrite(L_R_EN, HIGH);
+  digitalWrite(L_L_EN, HIGH);
+  analogWrite(L_RPWM, 255);
+  analogWrite(L_LPWM, 0);
+
+  digitalWrite(R_R_EN, HIGH);
+  digitalWrite(R_L_EN, HIGH);
+  analogWrite(R_RPWM, 0);
+  analogWrite(R_LPWM, 0);
+}
+
+void forLef() {
+  digitalWrite(L_R_EN, HIGH);
+  digitalWrite(L_L_EN, HIGH);
+  analogWrite(L_RPWM, 0);
+  analogWrite(L_LPWM, 0);
+
+  digitalWrite(R_R_EN, HIGH);
+  digitalWrite(R_L_EN, HIGH);
+  analogWrite(R_RPWM, 255);
+  analogWrite(R_LPWM, 0);
+}
+
+void bacRig() {
+  digitalWrite(L_R_EN, HIGH);
+  digitalWrite(L_L_EN, HIGH);
+  analogWrite(L_RPWM, 0);
+  analogWrite(L_LPWM, 255);
+
+  digitalWrite(R_R_EN, HIGH);
+  digitalWrite(R_L_EN, HIGH);
+  analogWrite(R_RPWM, 0);
+  analogWrite(R_LPWM, 0);
+}
+
+void bacLef() {
+  digitalWrite(L_R_EN, HIGH);
+  digitalWrite(L_L_EN, HIGH);
+  analogWrite(L_RPWM, 0);
+  analogWrite(L_LPWM, 0);
+
+  digitalWrite(R_R_EN, HIGH);
+  digitalWrite(R_L_EN, HIGH);
+  analogWrite(R_RPWM, 0);
+  analogWrite(R_LPWM, 255);
+}
