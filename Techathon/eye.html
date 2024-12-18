@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eye Health & Wellness App with Accessibility Options</title>
+ 
+</head>
+<body>
+
+  <button class="toggle-btn" onclick="toggleSidebar()">☰ Toggle Sidebar</button>
+  <div class="sidebar" id="sidebar">
+    <h2>Accessibility Options</h2>
+    <label>
+      <input type="checkbox" id="dark-mode" onchange="applySettings()"> Dark Mode
+    </label><br>
+    <label>
+      <input type="checkbox" id="large-text" onchange="applySettings()"> Large Text
+    </label><br>
+    <label>
+      <input type="checkbox" id="high-contrast" onchange="applySettings()"> High Contrast
+    </label><br>
+    <button onclick="resetSettings()">Reset All</button>
+  </div>
+
+  <h1>Eye Health & Wellness App</h1>
+
+  <div class="section">
+    <button onclick="toggleSection('eyeStrain')">Eye Strain Monitor</button>
+    <div id="eyeStrain" class="section-content">
+      <button onclick="startTimer()">Start Monitoring</button>
+      <p id="timerStatus" class="timer"></p>
+      <div id="progressBarContainer" class="progress-bar">
+        <div id="progressBar" class="progress-bar-filled"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <button onclick="toggleSection('visionTest')">Vision Test Simulator</button>
+    <div id="visionTest" class="section-content">
+      <h2>Snellen Chart Test</h2>
+      <p>Can you read this letter?</p>
+      <p id="letters" class="vision-text">E</p>
+      <p>Test your vision!</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <button onclick="toggleSection('blinkReminder')">Blink Reminder</button>
+    <div id="blinkReminder" class="section-content">
+      <label for="blinkTime">Enter minutes for Blink Reminder:</label>
+      <input type="number" id="blinkTime" placeholder="Number of minutes" min="1">
+      <button onclick="startBlinkReminder()">Start Blink Reminder</button>
+      <p id="blinkMessage" class="blinkMessage"></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <button onclick="toggleSection('eyeHealth')">Eye Health Tracker</button>
+    <div id="eyeHealth" class="section-content">
+      <label for="symptom">Log your Symptom:</label>
+      <input type="text" id="symptom" placeholder="Enter symptom">
+      <button onclick="logSymptom()">Log Symptom</button>
+      <div class="symptom-history">
+        <h3>Symptom History:</h3>
+        <ul id="symptomHistory"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="alertMessage" class="alert">
+    Please contact your doctor for advice on your eye health.
+  </div>
+
+  <script>
+    const body = document.body;
+    let blinkInterval, blinkTimeInMinutes;
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('active');
+    }
+
+    function toggleSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      section.classList.toggle('active');
+    }
+
+    function applySettings() {
+      body.className = '';
+
+      if (document.getElementById('dark-mode').checked) {
+        body.classList.add('dark-mode');
+      }
+      if (document.getElementById('large-text').checked) {
+        body.classList.add('large-text');
+      }
+      if (document.getElementById('high-contrast').checked) {
+        body.classList.add('high-contrast');
+      }
+    }
+
+    function resetSettings() {
+      document.getElementById('dark-mode').checked = false;
+      document.getElementById('large-text').checked = false;
+      document.getElementById('high-contrast').checked = false;
+      body.className = '';
+    }
+
+    let timer;
+    function startTimer() {
+      let minutes = 0;
+      document.getElementById('progressBar').style.width = '0%'; // Reset progress bar
+      timer = setInterval(() => {
+        minutes++;
+        document.getElementById('timerStatus').textContent = You've been using your device for ${minutes} minute(s). Time for a break soon!;
+
+        let progress = (minutes / 30) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+
+        if (minutes % 30 === 0) {
+          alert('Time for a break! Take care of your eyes.');
+        }
+      }, 60000); 
+    }
+
+    // Blink Reminder
+    function startBlinkReminder() {
+      const minutes = document.getElementById('blinkTime').value;
+      if (minutes && minutes > 0) {
+        blinkTimeInMinutes = minutes * 60000; 
+        setTimeout(() => {
+          // Hide all sections and show alert
+          document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
+          document.getElementById('alertMessage').style.display = 'block'; 
+        }, blinkTimeInMinutes);
+      } else {
+        alert("Please enter a valid number of minutes.");
+      }
+    }
+
+    
+    function logSymptom() {
+      const symptomInput = document.getElementById('symptom');
+      const symptomText = symptomInput.value.trim();
+      if (symptomText) {
+        const symptomHistory = document.getElementById('symptomHistory');
+        const listItem = document.createElement('li');
+        listItem.textContent = symptomText;
+        symptomHistory.appendChild(listItem);
+        symptomInput.value = ''; 
+
+       
+        alert("Please contact your doctor for advice on your eye health.");
+      }
+    }
+
+   
+    function changeVisionTest() {
+      const visionText = document.getElementById('letters');
+      // Change direction randomly between -90deg and 90deg and change the size
+      const randomDegree = Math.random() > 0.5 ? 90 : -90;
+      const randomSize = Math.random() * 2 + 2; // Random size between 2em and 4em
+      visionText.style.transform = rotate(${randomDegree}deg);
+      visionText.style.fontSize = ${randomSize}em;
+    }
+
+   
+    window.onload = function() {
+      document.getElementById('progressBar').style.width = '0%'; 
+      document.getElementById('blinkMessage').style.opacity = 0; 
+      changeVisionTest(); 
+      setInterval(changeVisionTest, 5000); 
+    };
+  </script>
+
+</body>
+</html>
